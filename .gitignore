@@ -1,0 +1,16 @@
+# Environment variables and secrets
+.env
+
+# Virtual environment
+.venv/
+
+# Python cache
+__pycache__/
+*.py[cod]
+
+# macOS files
+.DS_Store
+
+# Uploaded invoices
+uploads/*
+!uploads/.gitkeep
