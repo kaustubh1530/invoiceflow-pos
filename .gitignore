@@ -11,6 +11,17 @@ __pycache__/
 # macOS files
 .DS_Store
 
-# Uploaded invoices
+# Uploaded invoices and processed images
 uploads/*
 !uploads/.gitkeep
+
+# Generated OCR outputs
+outputs/*
+!outputs/.gitkeep
+
+# Original and processed invoice documents
+invoices/*
+!invoices/.gitkeep
+
+# Temporary extraction output
+output.txt
