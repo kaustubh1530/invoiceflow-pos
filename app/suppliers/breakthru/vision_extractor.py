@@ -61,34 +61,47 @@ def extract_breakthru_invoice_from_image(
             {
                 "role": "system",
                 "content": """
-You are an invoice extraction specialist for Breakthru Beverage.
+You are a specialist in extracting printed data from Breakthru Beverage invoices.
 
-Read the supplied invoice image directly. Extract only printed
-information that is visibly supported by the image.
+Extract every visible product row accurately using the supplied structured schema.
 
-IMPORTANT RULES:
+EXACT INVOICE COLUMN MAPPING:
 
-1. Ignore handwritten notes, circles, ticks, and counting marks.
-2. Read the printed table columns carefully.
-3. Cases means the number of cases purchased.
-4. Btls means the number of individual bottles.
-5. Pieces contains the supplier item number.
-6. Item contains the UPC or barcode.
-7. Keep item number and UPC separate.
-8. Size is the printed bottle or package size.
-9. BPC means bottles per case.
-10. Extract Unit Price, Unit Disc, Unit Price Net,
-    Net Btl, and Net Sales into their correct fields.
-11. Do not confuse prices from adjacent columns.
-12. Do not invent missing or unreadable values.
-13. Do not calculate missing quantities or prices.
-14. Do not include delivery fees, taxes, or other charges
-    as product line items.
-15. Extract only product rows visible on this page.
-16. The invoice may have multiple pages. Do not assume
-    this page contains every product or the final invoice total.
-17. If a value cannot be read confidently, leave it null.
-18. Preserve product descriptions as printed.
+1. Cases: On the supplied Breakthru invoice images, the entries visible in the Cases column are handwritten circled annotations. They are NOT printed supplier quantities. Therefore, return null for case_quantity for these rows. Never extract the handwritten circled numbers as quantities. Do not infer case quantities from Btls or BPC.
+
+2. Btls: Extract the printed individual bottle quantity. Map to bottle_quantity. This is the actual quantity of bottles received.
+
+3. Pieces: This column contains the supplier product item number. Map to item_number. Never interpret it as a quantity.
+
+4. Item: This column contains the UPC or barcode. Map to upc_or_barcode. Preserve printed digits exactly.
+
+5. Size: Map to item_size.
+
+6. BPC: Extract bottles per case. Map to bottles_per_case. Never confuse BPC with Btls.
+
+7. Description: Preserve the printed description. Map to product_name.
+
+8. Pricing:
+Unit Price -> unit_price
+Unit Disc -> unit_discount
+Unit Price Net -> net_unit_price
+Net Btl -> net_bottle_price
+Net Sales -> net_sales
+
+STRICT RULES:
+
+- Read each product row horizontally.
+- Keep values aligned with their correct columns.
+- Extract printed Cases quantities but ignore handwritten annotations.
+- Never confuse Pieces with Btls.
+- Never confuse BPC with Btls.
+- Never calculate or infer missing values.
+- Never replace unreadable values with zero.
+- Use null for missing or uncertain values.
+- Extract every visible product row.
+- Preserve product descriptions and barcode digits.
+- Exclude taxes, delivery fees, and non-product charges.
+- Never invent information.
 """,
             },
             {

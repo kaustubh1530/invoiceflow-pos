@@ -10,61 +10,61 @@ class BreakthruLineItem(BaseModel):
 
     item_number: Optional[str] = Field(
         default=None,
-        description="Breakthru supplier product item number."
+        description="Supplier item number printed in the Pieces column.",
     )
 
     upc_or_barcode: Optional[str] = Field(
         default=None,
-        description="Printed product UPC or barcode."
+        description="Product UPC or barcode printed in the Item column.",
     )
 
     product_name: str = Field(
-        description="Printed product description."
+        description="Product description printed on the invoice.",
     )
 
     item_size: Optional[str] = Field(
         default=None,
-        description="Bottle or package size, such as 375ML or 750ML."
+        description="Printed product size, such as 375ML or 750ML.",
     )
 
     bottles_per_case: Optional[int] = Field(
         default=None,
-        description="Printed BPC value."
+        description="BPC value printed on the invoice.",
     )
 
-    case_quantity: Decimal = Field(
-        default=Decimal("0"),
-        description="Number of cases purchased."
+    case_quantity: Optional[Decimal] = Field(
+        default=None,
+        description="Printed Cases quantity only. Ignore all handwritten marks.",
     )
 
-    bottle_quantity: int = Field(
-        default=0,
-        description="Number of individual bottles purchased."
+    bottle_quantity: Optional[int] = Field(
+        default=None,
+        description="Printed Btls quantity. This is the received bottle quantity.",
     )
 
     unit_price: Optional[Decimal] = Field(
         default=None,
-        description="Original printed unit price."
+        description="Original printed Unit Price.",
     )
 
     unit_discount: Optional[Decimal] = Field(
         default=None,
-        description="Printed discount per unit."
+        description="Printed Unit Disc.",
     )
 
     net_unit_price: Optional[Decimal] = Field(
         default=None,
-        description="Unit price after discount."
+        description="Printed Unit Price Net.",
     )
 
     net_bottle_price: Optional[Decimal] = Field(
         default=None,
-        description="Printed net bottle price."
+        description="Printed Net Btl price.",
     )
 
     net_sales: Optional[Decimal] = Field(
         default=None,
-        description="Final net sales amount for this line."
+        description="Printed Net Sales amount.",
     )
 
 
@@ -73,9 +73,9 @@ class BreakthruInvoice(BaseModel):
 
     vendor_name: str = "Breakthru Beverage"
 
-    invoice_number: str
+    invoice_number: Optional[str] = None
 
-    invoice_date: str
+    invoice_date: Optional[str] = None
 
     line_items: list[BreakthruLineItem] = Field(
         default_factory=list
